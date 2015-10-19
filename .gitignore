@@ -1,0 +1,5 @@
+*.o
+*.so
+vmod_*.rst
+vcc_if.*
+nbproject
