@@ -10,10 +10,12 @@ LDFLAGS=-shared
 LIBFLAGS=
 LIBTEXTGLASS=$(TEXTGLASS_PREFIX)/libtextglass.a
 VMODPY=$(VARNISH_PREFIX)/share/varnish/vmodtool.py
+VMOD_DIR=$(VARNISH_PREFIX)/lib/varnish/vmods
 PYTHON=python
+CP=cp
 RM=rm -f
 
-.PHONY: clean all
+.PHONY: clean all test install
 
 all:			libvmod_textglass.so
 
@@ -31,5 +33,12 @@ vcc_if.%:		vmod_textglass.vcc
 
 $(LIBTEXTGLASS):
 			$(MAKE) -C $(TEXTGLASS_PREFIX) libtextglass.a
+
+test:			libvmod_textglass.so
+			$(VARNISH_PREFIX)/bin/varnishtest tests/*.vtc
+
+install:		libvmod_textglass.so
+			$(CP) libvmod_textglass.so $(VMOD_DIR)
+
 clean:
 			$(RM) *.o vcc_if.c vcc_if.h *.so *.rst
